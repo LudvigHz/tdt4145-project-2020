@@ -1,7 +1,7 @@
 import java.sql.*;
 
 public abstract class DBConn {
-  protected Connection conn;
+  public static Connection conn;
   private static String DB_URL = "jdbc:mysql://localhost:3306/";
   private static String DB_NAME = "filmdb";
   private static String DB_USER = "root";
@@ -26,8 +26,8 @@ public abstract class DBConn {
       conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASS);
     } catch (Exception e) {
       System.out.println("Could not connect to database:" + e.toString());
-      throw new RuntimeException("Could not connect to database", e);
-      // createDb(DB_NAME);
+      // throw new RuntimeException("Could not connect to database", e);
+      createDb(DB_NAME);
     }
   }
 }

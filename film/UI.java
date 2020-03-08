@@ -25,7 +25,7 @@ public class UI {
     System.out.print((char) 27 + "[0m");
   }
 
-  private void error(String text) {
+  public void error(String text) {
     System.out.println((char) 27 + "[31m" + text);
     resetText();
   }
