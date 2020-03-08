@@ -3,7 +3,7 @@ import java.sql.*;
 public abstract class DBConn {
   public static Connection conn;
   private static String DB_URL = "jdbc:mysql://localhost:3306/";
-  private static String DB_NAME = "filmdb";
+  private static String DB_NAME = "Film";
   private static String DB_USER = "root";
   private static String DB_PASS = "root";
 

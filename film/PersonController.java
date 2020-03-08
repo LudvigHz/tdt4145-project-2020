@@ -8,8 +8,25 @@ public class PersonController extends BaseController {
   }
 
   public void selectOperation() {
-    int option = Main.UI.menu("Person", Arrays.asList("List all", "Insert new"));
-    // TODO switch
+
+    main:
+    while (true) {
+      int option =
+          Main.UI.menu("Person", Arrays.asList("Main", "List all", "Insert new", "See all roles"));
+      switch (option) {
+        case 0:
+          break main;
+        case 1:
+          listAllItems();
+          break;
+        case 2:
+          insertPerson();
+          break;
+        case 3:
+          listAllRoles();
+          break;
+      }
+    }
   }
 
   public void insertPerson() {
@@ -29,6 +46,19 @@ public class PersonController extends BaseController {
               + "','"
               + country
               + "');");
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllRoles() {
+    int pid = Integer.valueOf(Main.UI.getUserInput("User ID: "));
+
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select SF.rolle as Rolle, F.tittel as Film, F.utgivelsesår as År from SkueSpillerIFilm as SF natural join Film as F ");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
