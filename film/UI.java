@@ -30,15 +30,6 @@ public class UI {
     resetText();
   }
 
-  private interface MenuObjectInterface {
-    public void handler();
-  }
-
-  // Class for constructing menu items to use with the UI
-  public abstract class MenuObject implements MenuObjectInterface {
-    public String text;
-  }
-
   private void printMenuItem(int i, String text) {
     String line = "  " + StringUtils.rightPad(Integer.toString(i), 3) + " -- ";
     line += StringUtils.rightPad(text, 40);
@@ -63,19 +54,15 @@ public class UI {
     return option;
   }
 
-  private void menu(String title, ArrayList<MenuObject> items) {
+  public int menu(String title, List<String> items) {
     spacer(2);
     header(title);
     for (int i = 0; i < items.size(); i++) {
-      MenuObject m = items.get(i);
-      printMenuItem(i, m.text);
+      String m = items.get(i);
+      printMenuItem(i, m);
     }
 
-    int option = getMenuOption(items.size());
-
-    MenuObject selectedObject = items.get(option);
-
-    selectedObject.handler();
+    return getMenuOption(items.size());
   }
 
   public void mainMenu() {
