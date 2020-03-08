@@ -8,6 +8,10 @@ public class Main {
   public static UserController uc = new UserController();
   public static DBController db = new DBController();
 
+  public static FilmController fc = new FilmController();
+
+  public static CategoryController cc = new CategoryController();
+
   public static void main(String[] args) {
     db.connect();
 
@@ -15,7 +19,8 @@ public class Main {
     while (true) {
       int option =
           UI.menu(
-              "Main menu", Arrays.asList("Exit", "People", "Movies", "Ratings", "Load fixtures"));
+              "Main menu",
+              Arrays.asList("Exit", "People", "Movies", "Ratings", "Categories", "Load fixtures"));
       switch (option) {
         case 0:
           break main;
@@ -23,7 +28,7 @@ public class Main {
           pc.selectOperation();
           break;
         case 2:
-          // TODO
+          fc.selectOperation();
           break;
         case 3:
           uc.selectOperation();
