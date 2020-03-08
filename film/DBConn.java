@@ -12,7 +12,7 @@ public abstract class DBConn {
   private void createDb(String name) {
     try {
       System.out.printf("Creating database %s%n ...\n\n", name);
-      conn = DriverManager.getConnection(DB_URL, DB_NAME, DB_PASS);
+      conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
       Statement stmt = conn.createStatement();
       stmt.execute("create database " + name);
       conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASS);
@@ -23,11 +23,11 @@ public abstract class DBConn {
 
   public void connect() {
     try {
-      conn = DriverManager.getConnection(DB_NAME + DB_NAME, DB_USER, DB_PASS);
+      conn = DriverManager.getConnection(DB_URL + DB_NAME, DB_USER, DB_PASS);
     } catch (Exception e) {
-      System.out.printf("Could not connect to database");
-      // throw new RuntimeException("Could not connect to database", e);
-      createDb(DB_NAME);
+      System.out.println("Could not connect to database:" + e.toString());
+      throw new RuntimeException("Could not connect to database", e);
+      // createDb(DB_NAME);
     }
   }
 }
