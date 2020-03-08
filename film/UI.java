@@ -44,6 +44,11 @@ public class UI {
     line += StringUtils.rightPad(text, 40);
   }
 
+  public String getUserInput(String text) {
+    System.out.print(text);
+    return input.nextLine();
+  }
+
   public int getMenuOption(int max) {
     int option = -1;
     boolean error = false;
