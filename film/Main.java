@@ -34,6 +34,9 @@ public class Main {
           uc.selectOperation();
           break;
         case 4:
+          cc.selectOperation();
+          break;
+        case 5:
           db.loadFixtures();
           break;
       }
