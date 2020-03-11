@@ -12,6 +12,8 @@ public class Main {
 
   public static CategoryController cc = new CategoryController();
 
+  public static FilmCompanyController fcc = new FilmCompanyController();
+
   public static void main(String[] args) {
     db.connect();
 
@@ -20,7 +22,14 @@ public class Main {
       int option =
           UI.menu(
               "Main menu",
-              Arrays.asList("Exit", "People", "Movies", "Ratings", "Categories", "Load fixtures"));
+              Arrays.asList(
+                  "Exit",
+                  "People",
+                  "Movies",
+                  "Ratings",
+                  "Categories",
+                  "Companies",
+                  "Load fixtures"));
       switch (option) {
         case 0:
           break main;
@@ -37,6 +46,9 @@ public class Main {
           cc.selectOperation();
           break;
         case 5:
+          fcc.selectOperation();
+          break;
+        case 6:
           db.loadFixtures();
           break;
       }
