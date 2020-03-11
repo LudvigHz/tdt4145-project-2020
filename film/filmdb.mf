@@ -1,0 +1,2 @@
+Main-Class: Main
+Class-Path: ../lib/mysql-connector-java-8.0.19.jar ../lib/commons-lang3-3.9.jar

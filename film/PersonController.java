@@ -166,7 +166,7 @@ public class PersonController extends BaseController {
       Statement stmt2 = conn.createStatement();
       ResultSet data2 =
           stmt2.executeQuery(
-              "select F.tittel as Film, F.utgivelsesår as År from ManusforfatterIFilm as SF natural join Film as F where SF.PersonID = "
+              "select F.tittel as Film, F.utgivelsesår as År from ManusForfatterIFilm as SF natural join Film as F where SF.PersonID = "
                   + Integer.toString(id));
       Main.UI.printItems(data2, data2.getMetaData(), "Screenplay written movies");
 
