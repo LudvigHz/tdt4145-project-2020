@@ -8,7 +8,7 @@ insert ignore into Film(FilmID, tittel, `utgivelsesår`, lanseringsdato, beskriv
 
 insert ignore into Utgivelse(FilmID, FilmSelskapID) values(1, 1);
 insert ignore into Utgivelse(FilmID, FilmSelskapID) values(2, 3);
-insert ignore into Utgivelse(FilmID, FilmSelskapID) values(3, 3);
+insert ignore into Utgivelse(FilmID, FilmSelskapID) values(3, 2);
 insert ignore into Utgivelse(FilmID, FilmSelskapID) values(4, 1);
 
 

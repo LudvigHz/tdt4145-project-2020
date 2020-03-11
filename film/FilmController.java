@@ -45,7 +45,8 @@ public class FilmController extends BaseController {
                   "See directors",
                   "See writers",
                   "See ratings",
-                  "See comments"));
+                  "See comments",
+                  "See music"));
       switch (options2) {
         case 0:
           break movies;
@@ -70,7 +71,28 @@ public class FilmController extends BaseController {
         case 6:
           listAllComments(FilmID);
           break;
+        case 7:
+          listMusic(FilmID);
       }
+    }
+  }
+
+  public void listMusic(String id) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select M.MusikkID, F.navn as Fremforer, K.navn as Komponist"
+                  + " from Musikk as M"
+                  + " left join Person as K on M.komponist = K.PersonID"
+                  + " left join Person as F on M.fremforer = F.PersonID"
+                  + " natural join FilmMusikk natural join Film as Fi"
+                  + " where Fi.FilmID = "
+                  + id);
+
+      Main.UI.printItems(data, data.getMetaData(), "Music for movie");
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
     }
   }
 

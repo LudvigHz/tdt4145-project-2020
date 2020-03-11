@@ -109,6 +109,7 @@ public class UserController extends BaseController {
               + "','"
               + userId
               + "');");
+      Main.UI.success("Rating registered!");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -138,6 +139,7 @@ public class UserController extends BaseController {
               + "','"
               + text
               + "');");
+      Main.UI.success("Comment registered!");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }

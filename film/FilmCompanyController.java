@@ -73,7 +73,7 @@ public class FilmCompanyController extends BaseController {
       Statement stmt = conn.createStatement();
       ResultSet data =
           stmt.executeQuery(
-              "select FS.FilmSelskapID, FS.addresse,"
+              "select FS.navn as Selskap,"
                   + " count(F.FilmID) as Antall_filmer,"
                   + " group_concat(F.tittel) as Filmer"
                   + " from FilmSelskap as FS"
