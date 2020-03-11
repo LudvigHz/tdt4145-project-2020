@@ -28,7 +28,8 @@ public class Main {
                   "Categories",
                   "Companies",
                   "Seasons",
-                  "Load fixtures"));
+                  "Load fixtures",
+                  "Reset database"));
       switch (option) {
         case 0:
           break main;
@@ -53,6 +54,8 @@ public class Main {
         case 7:
           db.loadFixtures();
           break;
+        case 8:
+          db.resetdb();
       }
     }
   }
