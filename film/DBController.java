@@ -5,7 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 public class DBController extends DBConn {
   public void loadFixtures() {
     String[] fixtures = {
-      "fixtures/people.sql", "fixtures/FilmSelskap.sql", "fixtures/film.sql", "fixtures/musikk.sql"
+      "fixtures/people.sql",
+      "fixtures/FilmSelskap.sql",
+      "fixtures/film.sql",
+      "fixtures/musikk.sql",
+      "fixtures/categories.sql",
     };
     try {
       Statement stmt = conn.createStatement();
