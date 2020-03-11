@@ -16,18 +16,32 @@ insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(1, true, 
 insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(2, true, 110);
 insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(3, true, 100);
 
-insert ignore into Kategori(KategoriID, kategori) values(1, "Thriller");
-insert ignore into Kategori(KategoriID, kategori) values(2, "Action");
-insert ignore into Kategori(KategoriID, kategori) values(3, "Drama");
-insert ignore into Kategori(KategoriID, kategori) values(4, "Comedy");
-
 insert ignore into KategoriIFilm(FilmID, KategoriID) values(1, 1);
 insert ignore into KategoriIFilm(FilmID, KategoriID) values(2, 1);
 insert ignore into KategoriIFilm(FilmID, KategoriID) values(3, 3);
 insert ignore into KategoriIFilm(FilmID, KategoriID) values(3, 2);
 insert ignore into KategoriIFilm(FilmID, KategoriID) values(2, 2);
+
 insert ignore into Serie(FilmID) values(4);
+
 insert ignore into Sesong values(4,1, true);
 insert ignore into Sesong values(4,2, true);
 insert ignore into Sesong values(4,3, true);
 insert ignore into Sesong values(4,4, false);
+
+insert ignore into SkueSpillerIFilm values(2, 7, "Jules Winnfield");
+insert ignore into SkueSpillerIFilm values(2, 8, "Vincent Vega");
+
+insert ignore into RegissørIFilm values(2, 9);
+insert ignore into ManusForfatterIFilm values(2, 9);
+insert ignore into ManusForfatterIFilm values(2, 12);
+
+insert ignore into Film values (5, "Winter is coming", '2011', '2011-04-17', "Eddard Stark is torn between his family and an old friend when asked to serve at the side of King Robert Baratheon; Viserys plans to wed his sister to a nomadic warlord in exchange for an army.");
+insert ignore into Film values (6, "The Kingsroad", '2011', '2011-04-24', "While Bran recovers from his fall, Ned takes only his daughters to King's Landing. Jon Snow goes with his uncle Benjen to the Wall. Tyrion joins them.");
+
+insert ignore into Episode values (5, 1, 1, 60, 4);
+insert ignore into Episode values (6, 2, 1, 60, 4);
+
+insert ignore into SkueSpillerIFilm values(4, 3, "Toromund Giantsman");
+insert ignore into SkueSpillerIFilm values(4, 5, "Jaime Lannister");
+insert ignore into SkueSpillerIFilm values(4, 6, "Tywin Lannister");
