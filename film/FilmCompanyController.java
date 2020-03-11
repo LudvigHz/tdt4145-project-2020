@@ -11,7 +11,8 @@ public class FilmCompanyController extends BaseController {
 
     main:
     while (true) {
-      int option = Main.UI.menu("Person", Arrays.asList("Main", "List all", "Insert new"));
+      int option =
+          Main.UI.menu("Person", Arrays.asList("Main", "List all", "Insert new", "View details"));
       switch (option) {
         case 0:
           break main;
@@ -20,6 +21,9 @@ public class FilmCompanyController extends BaseController {
           break;
         case 2:
           createFilmCompany();
+          break;
+        case 3:
+          listDetails();
           break;
       }
     }
@@ -44,6 +48,28 @@ public class FilmCompanyController extends BaseController {
               + "','"
               + land
               + "');");
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listDetails() {
+    Main.cc.listAllItems();
+    int kategoriId = Integer.valueOf(Main.UI.getUserInput("Kategori ID: "));
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select FS.*, count(F.FilmID) Antall_filmer from FilmSelskap as FS"
+                  + " left join Utgivelse as U on U.SelskapID = FS.FilmSelskapID"
+                  + " natural join Film as F"
+                  + " natural join FilmKategori"
+                  + " natural join Kategori as K"
+                  + " where K.KategoriID = "
+                  + Integer.toString(kategoriId)
+                  + " group by FS.FilmSelskapID"
+                  + " order by Antall_filmer");
+      Main.UI.printItems(data, data.getMetaData(), "Companies with ");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }

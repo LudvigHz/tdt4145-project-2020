@@ -13,3 +13,16 @@ insert ignore into Utgivelse(FilmID, SelskapID) values(3, 3);
 insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(1, true, 120);
 insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(2, true, 110);
 insert ignore into SpilleFilm(FilmID, `utgittPåVIDeo`, lengde) values(3, true, 100);
+
+
+insert ignore into Kategori(KategoriID, kategori) values(1, "Thriller");
+insert ignore into Kategori(KategoriID, kategori) values(2, "Action");
+insert ignore into Kategori(KategoriID, kategori) values(3, "Drama");
+insert ignore into Kategori(KategoriID, kategori) values(4, "Comedy");
+
+
+insert ignore into FilmKategori(FilmID, KategoriID) values(1, 1);
+insert ignore into FilmKategori(FilmID, KategoriID) values(2, 1);
+insert ignore into FilmKategori(FilmID, KategoriID) values(3, 3);
+insert ignore into FilmKategori(FilmID, KategoriID) values(3, 2);
+insert ignore into FilmKategori(FilmID, KategoriID) values(2, 2);
