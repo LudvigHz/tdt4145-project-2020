@@ -163,4 +163,3 @@ CREATE TABLE `Anmeldelse` (
   foreign key (FilmID)
     references Film (FilmID)
 );
-

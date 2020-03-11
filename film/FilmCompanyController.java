@@ -13,7 +13,7 @@ public class FilmCompanyController extends BaseController {
     while (true) {
       int option =
           Main.UI.menu(
-              "Person",
+              "Film company",
               Arrays.asList("Main", "List all", "Insert new", "View companies by category"));
       switch (option) {
         case 0:
@@ -77,9 +77,9 @@ public class FilmCompanyController extends BaseController {
                   + " count(F.FilmID) as Antall_filmer,"
                   + " group_concat(F.tittel) as Filmer"
                   + " from FilmSelskap as FS"
-                  + " left join Utgivelse as U on U.SelskapID = FS.FilmSelskapID"
+                  + " natural join Utgivelse as U"
                   + " natural join Film as F"
-                  + " natural join FilmKategori"
+                  + " natural join KategoriIFilm"
                   + " natural join Kategori as K"
                   + " where K.KategoriID = "
                   + Integer.toString(kategoriId)
