@@ -51,7 +51,18 @@ public class PersonController extends BaseController {
     }
   }
 
+  public void listPeopleShort() {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data = stmt.executeQuery("select PersonID as id, navn as Name from Person");
+      Main.UI.printItems(data, data.getMetaData());
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
   public void listAllRoles() {
+    listPeopleShort();
     int pid = Integer.valueOf(Main.UI.getUserInput("User ID: "));
 
     try {
@@ -59,6 +70,7 @@ public class PersonController extends BaseController {
       ResultSet data =
           stmt.executeQuery(
               "select SF.rolle as Rolle, F.tittel as Film, F.utgivelsesår as År from SkueSpillerIFilm as SF natural join Film as F ");
+      Main.UI.printItems(data, data.getMetaData());
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
