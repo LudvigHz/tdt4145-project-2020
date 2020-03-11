@@ -34,6 +34,41 @@ public class FilmController extends BaseController {
     List<Actor> actors = getActorKeys();
     List<Integer> directorKeys = getPersonKey("director");
     List<Integer> writerKeys = getPersonKey("writer");
+    List<Integer> categoryKeys = getCategoryKeys();
+    // declare variables that are gathered in if-statements
+    int seriesKey = 0;
+    int seasonNumber = 0;
+    int lastEpisode = 0;
+    boolean isEpisode = Main.UI.getUserInput("Is this an episode of a series [y/n]: ").equals("y");
+    String length = "0";
+    int companyKey = 0;
+    String publishedOnVideo = "false";
+    boolean isSeries = false;
+    String firstSeasonOnVideo = "false";
+    if (!isEpisode) {
+      isSeries = Main.UI.getUserInput("Is this a series [y/n]: ").equals("y");
+      companyKey = getCompany();
+      firstSeasonOnVideo =
+          Main.UI
+                  .getUserInput(
+                      "Has the first season of this series been released on video [y/n]: ")
+                  .equals("y")
+              ? "true"
+              : "false";
+      if (!isSeries) {
+        publishedOnVideo =
+            Main.UI.getUserInput("Is the film published on video [y/n]: ").equals("y")
+                ? "true"
+                : "false";
+        length = Main.UI.getUserInput("Enter the length of the movie in minutes: ");
+      }
+    }
+    if (isEpisode) {
+      seriesKey = Main.sc.getSeriesKey();
+      seasonNumber = this.getSeason(seriesKey);
+      lastEpisode = this.getLastEpisode(seriesKey, seasonNumber) + 1;
+      length = Main.UI.getUserInput("Enter the length of the movie in minutes: ");
+    }
 
     try {
       Statement stmt = conn.createStatement();
@@ -71,6 +106,46 @@ public class FilmController extends BaseController {
         stmt.executeUpdate(
             "insert into ManusForfatterIFilm values (" + FilmID + ", " + writerKey + ")");
       }
+      for (Integer categoryKey : categoryKeys) {
+        stmt.executeUpdate(
+            "insert into KategoriIFilm values (" + FilmID + ", " + categoryKey + ")");
+      }
+      if (!isEpisode) {
+        stmt.executeUpdate("insert into Utgivelse values (" + FilmID + ", " + companyKey + ")");
+        // Create first season when creating a series
+        stmt.executeUpdate(
+            "insert into Sesong (FilmID, SesongNR, utgittPåVideo) values("
+                + FilmID
+                + ", "
+                + "1"
+                + ", "
+                + firstSeasonOnVideo
+                + ");");
+        if (!isSeries) {
+          stmt.executeUpdate(
+              "insert into SpilleFilm values ("
+                  + FilmID
+                  + ", "
+                  + publishedOnVideo
+                  + ", "
+                  + length
+                  + ")");
+        }
+      }
+      if (isEpisode) {
+        stmt.executeUpdate(
+            "insert into Episode (FilmID, episodeNr, sesongNr, lengde, SerieID) values("
+                + FilmID
+                + ", "
+                + lastEpisode
+                + ", "
+                + seasonNumber
+                + ", "
+                + length
+                + ", "
+                + seriesKey
+                + ")");
+      }
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -84,6 +159,59 @@ public class FilmController extends BaseController {
       this.role = role;
       this.primaryKey = primaryKey;
     }
+  }
+
+  private int getSeason(int seriesKey) {
+    while (true) {
+      Main.sc.listAllSeasons(seriesKey);
+      String seasonInput = Main.UI.getUserInput("Please choose a season: ");
+      int seasonNumber = 0;
+      try {
+        seasonNumber = Integer.parseInt(seasonInput);
+      } catch (Exception e) {
+        Main.UI.error("Input must be a number");
+        continue;
+      }
+      Collection<Integer> allKeys = new ArrayList<Integer>();
+      try {
+        Statement statement = conn.createStatement();
+        ResultSet result =
+            statement.executeQuery(
+                "select SesongNR from Sesong as ses natural join Serie as ser natural join Utgivelse natural join Film where FilmID="
+                    + seriesKey
+                    + " order by SesongNr asc");
+        while (result.next()) {
+          allKeys.add(result.getInt(1));
+        }
+      } catch (Exception e) {
+        Main.UI.error(e.toString());
+      }
+      if (!allKeys.contains(seasonNumber)) {
+        Main.UI.error("Season does not exist");
+        continue;
+      }
+      return seasonNumber;
+    }
+  }
+
+  private int getLastEpisode(int seriesKey, int seasonNumber) {
+    int lastEpisode = 0;
+    try {
+      Statement statement = conn.createStatement();
+      ResultSet result =
+          statement.executeQuery(
+              "select * from Episode where sesongNr="
+                  + seasonNumber
+                  + " and SerieID="
+                  + seriesKey
+                  + " order by episodeNr desc");
+      if (result.next()) {
+        lastEpisode = result.getInt(1);
+      }
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+    return lastEpisode;
   }
 
   private List<Actor> getActorKeys() {
@@ -171,5 +299,66 @@ public class FilmController extends BaseController {
       personList.add(personKey);
     }
     return personList;
+  }
+
+  private boolean tableContainsKey(int key, String table) {
+    Collection<Integer> allKeys = new ArrayList<Integer>();
+    try {
+      Statement statement = conn.createStatement();
+      ResultSet result = statement.executeQuery("select " + table + "ID from " + table);
+      while (result.next()) {
+        allKeys.add(result.getInt(1));
+      }
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+    return allKeys.contains(key);
+  }
+
+  private List<Integer> getCategoryKeys() {
+    List<Integer> categoryList = new ArrayList<Integer>();
+    while (true) {
+      Main.cc.listAllItems();
+      String categoryInput = Main.UI.getUserInput("Please choose a category, enter 0 to proceed: ");
+      if (categoryInput.equals("0") && categoryList.size() != 0) {
+        break;
+      } else if (categoryInput.equals("0")) {
+        Main.UI.error("A film requires at least one category");
+        continue;
+      }
+      int categoryKey = 0;
+      try {
+        categoryKey = Integer.parseInt(categoryInput);
+      } catch (Exception e) {
+        Main.UI.error("Input must be a number");
+        continue;
+      }
+      if (!tableContainsKey(categoryKey, "Kategori")) {
+        Main.UI.error("Category does not exist");
+        continue;
+      }
+      categoryList.add(categoryKey);
+    }
+    return categoryList;
+  }
+
+  private int getCompany() {
+    int companyKey = 0;
+    while (true) {
+      Main.fcc.listAllItems();
+      String categoryInput = Main.UI.getUserInput("Please choose a company: ");
+      try {
+        companyKey = Integer.parseInt(categoryInput);
+      } catch (Exception e) {
+        Main.UI.error("Input must be a number");
+        continue;
+      }
+      if (!tableContainsKey(companyKey, "FilmSelskap")) {
+        Main.UI.error("Company does not exist");
+        continue;
+      }
+      break;
+    }
+    return companyKey;
   }
 }

@@ -7,12 +7,10 @@ public class Main {
   public static PersonController pc = new PersonController();
   public static UserController uc = new UserController();
   public static DBController db = new DBController();
-
   public static FilmController fc = new FilmController();
-
   public static CategoryController cc = new CategoryController();
-
   public static FilmCompanyController fcc = new FilmCompanyController();
+  public static SeasonController sc = new SeasonController();
 
   public static void main(String[] args) {
     db.connect();
@@ -29,6 +27,7 @@ public class Main {
                   "Ratings",
                   "Categories",
                   "Companies",
+                  "Seasons",
                   "Load fixtures"));
       switch (option) {
         case 0:
@@ -49,6 +48,9 @@ public class Main {
           fcc.selectOperation();
           break;
         case 6:
+          sc.selectOperation();
+          break;
+        case 7:
           db.loadFixtures();
           break;
       }
