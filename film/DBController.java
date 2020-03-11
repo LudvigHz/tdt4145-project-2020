@@ -25,6 +25,17 @@ public class DBController extends DBConn {
     }
   }
 
+  public void resetdb() {
+    String script = "filmdbscriptv2.sql";
+
+    try {
+      executeScript(script);
+      Main.UI.success("Created tables for film database!");
+    } catch (Exception e2) {
+      Main.UI.error(e2.toString());
+    }
+  }
+
   private void executeScript(String filename) throws IOException, SQLException {
     ScriptRunner runner = new ScriptRunner(conn, false, false);
     runner.runScript(new BufferedReader(new FileReader("../" + filename)));

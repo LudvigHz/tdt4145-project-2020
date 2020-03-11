@@ -29,7 +29,8 @@ public class Main {
                   "Ratings",
                   "Categories",
                   "Companies",
-                  "Load fixtures"));
+                  "Load fixtures",
+                  "Reset database"));
       switch (option) {
         case 0:
           break main;
@@ -51,6 +52,8 @@ public class Main {
         case 6:
           db.loadFixtures();
           break;
+        case 7:
+          db.resetdb();
       }
     }
   }
