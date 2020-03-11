@@ -27,6 +27,7 @@ CREATE TABLE `FilmSelskap` (
 );
 
 CREATE TABLE `SkueSpillerIFilm` (
+   PRIMARY KEY (FilmID, PersonID),
   `FilmID` int not null,
   `PersonID` int not null,
   `rolle` varchar(255) not null,
@@ -37,6 +38,7 @@ CREATE TABLE `SkueSpillerIFilm` (
 );
 
 CREATE TABLE `ManusForfatterIFilm` (
+   PRIMARY KEY (FilmID, PersonID),
   `FilmID` int not null,
   `PersonID` int not null,
   foreign key (FilmID)
@@ -46,6 +48,7 @@ CREATE TABLE `ManusForfatterIFilm` (
 );
 
 CREATE TABLE `RegissørIFilm` (
+   PRIMARY KEY (FilmID, PersonID),
   `FilmID` int not null,
   `PersonID` int not null,
   foreign key (FilmID)
@@ -65,6 +68,7 @@ CREATE TABLE `Musikk` (
 );
 
 CREATE TABLE `FilmMusikk` (
+   PRIMARY KEY (FilmID, MusikkID),
   `FilmID` int not null,
   `MusikkID` int not null,
   foreign key (FilmID)
@@ -98,17 +102,22 @@ CREATE TABLE `Sesong` (
    PRIMARY KEY (FilmID, sesongNr),
   `FilmID` int not null,
   `sesongNr` int not null,
+  `utgittPåVideo` boolean not null,
   foreign key (FilmID)
     references Film (FilmID)
 );
 
 CREATE TABLE `Episode` (
-  `FilmID` int not null,
+  `FilmID` int primary key not null,
   `episodeNr` int not null,
-  `sesong` int not null,
+  `sesongNr` int not null,
   `lengde` int not null,
+  `SerieID` int not null,
   foreign key (FilmID)
-    references Film (FilmID)
+    references Film (FilmID),
+  foreign key (SerieID, sesongNr)
+	references Sesong (FilmID, sesongNr)
+  
 );
 
 CREATE TABLE `Kategori` (
@@ -117,6 +126,7 @@ CREATE TABLE `Kategori` (
 );
 
 CREATE TABLE `KategoriIFilm` (
+   PRIMARY KEY (FilmID, KategoriID),
   `FilmID` int not null,
   `KategoriID` int not null,
   foreign key (FilmID)
@@ -154,4 +164,3 @@ CREATE TABLE `Anmeldelse` (
     references Film (FilmID)
 );
 
-select * from Film;
