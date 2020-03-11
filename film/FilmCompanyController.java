@@ -12,7 +12,9 @@ public class FilmCompanyController extends BaseController {
     main:
     while (true) {
       int option =
-          Main.UI.menu("Person", Arrays.asList("Main", "List all", "Insert new", "View details"));
+          Main.UI.menu(
+              "Person",
+              Arrays.asList("Main", "List all", "Insert new", "View companies by category"));
       switch (option) {
         case 0:
           break main;
@@ -57,10 +59,24 @@ public class FilmCompanyController extends BaseController {
     Main.cc.listAllItems();
     int kategoriId = Integer.valueOf(Main.UI.getUserInput("Kategori ID: "));
     try {
+      Statement catstmt = conn.createStatement();
+      ResultSet catdata =
+          catstmt.executeQuery("select kategori from Kategori where KategoriID = " + kategoriId);
+
+      String catname = "";
+      if (catdata.next()) {
+        catname = catdata.getString(1);
+      }
+
+      Main.UI.success("Found companies with movies in the category: " + catname);
+
       Statement stmt = conn.createStatement();
       ResultSet data =
           stmt.executeQuery(
-              "select FS.*, count(F.FilmID) Antall_filmer from FilmSelskap as FS"
+              "select FS.FilmSelskapID, FS.addresse,"
+                  + " count(F.FilmID) as Antall_filmer,"
+                  + " group_concat(F.tittel) as Filmer"
+                  + " from FilmSelskap as FS"
                   + " left join Utgivelse as U on U.SelskapID = FS.FilmSelskapID"
                   + " natural join Film as F"
                   + " natural join FilmKategori"
@@ -69,7 +85,7 @@ public class FilmCompanyController extends BaseController {
                   + Integer.toString(kategoriId)
                   + " group by FS.FilmSelskapID"
                   + " order by Antall_filmer");
-      Main.UI.printItems(data, data.getMetaData(), "Companies with ");
+      Main.UI.printItems(data, data.getMetaData(), "Companies by category: " + catname);
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }

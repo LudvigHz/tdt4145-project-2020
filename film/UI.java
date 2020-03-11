@@ -111,7 +111,7 @@ public class UI {
           colNames.stream().reduce("", (s, n) -> s + StringUtils.rightPad(n, 30)).length()
               + colNames.size() * 2;
 
-      spacer(2);
+      spacer(1);
       header(header, len);
       tableRow(colNames);
       tableRowSep(len);
