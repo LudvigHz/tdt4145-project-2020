@@ -126,7 +126,7 @@ public class FilmController extends BaseController {
     Main.sc.listAllSeasons(Integer.parseInt(FilmID));
     String seasonNumber = Main.UI.getUserInput("Choose a season: ");
     listAllEpisodes(FilmID, seasonNumber);
-    String episodeNumber = Main.UI.getUserInput("Choose an episode");
+    String episodeNumber = Main.UI.getUserInput("Choose an episode: ");
     episodes:
     while (true) {
       int options2 =
@@ -173,12 +173,15 @@ public class FilmController extends BaseController {
       Statement stmt = conn.createStatement();
       ResultSet data =
           stmt.executeQuery(
-              "select * from Episode natural join Film where sesongNr="
+              "select E.episodeNr as Episode, E.sesongNr as Sesong,"
+                  + " E.lengde as Lengde, F.tittel as Tittel, F.utgivelsesår as År,"
+                  + " F.lanseringsdato as Dato, F.beskrivelse as Beskrivelse"
+                  + " from Episode as E natural join Film as F where sesongNr="
                   + seasonNumber
                   + " and SerieID="
                   + FilmID);
       ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
+      Main.UI.printItems(data, meta, "Episodes in season " + seasonNumber);
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -192,7 +195,7 @@ public class FilmController extends BaseController {
               "select navn, rolle from Person natural join SkueSpillerIFilm natural join Film where FilmID="
                   + FilmID);
       ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
+      Main.UI.printItems(data, meta, "Actors");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -206,7 +209,7 @@ public class FilmController extends BaseController {
               "select navn from Person natural join ManusForfatterIFilm natural join Film where FilmID="
                   + FilmID);
       ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
+      Main.UI.printItems(data, meta, "Writers");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -250,7 +253,7 @@ public class FilmController extends BaseController {
               "select navn from Person natural join RegissørIFilm natural join Film where FilmID="
                   + FilmID);
       ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
+      Main.UI.printItems(data, meta, "Directors");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -262,7 +265,7 @@ public class FilmController extends BaseController {
       ResultSet data =
           stmt.executeQuery("select * from SpilleFilm natural join Utgivelse natural join Film");
       ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
+      Main.UI.printItems(data, meta, "Movies");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -378,6 +381,7 @@ public class FilmController extends BaseController {
                   + ", "
                   + length
                   + ")");
+          Main.UI.success("Inserted a new movie: " + title);
         }
       }
       if (isEpisode) {
@@ -393,6 +397,7 @@ public class FilmController extends BaseController {
                 + ", "
                 + seriesKey
                 + ")");
+        Main.UI.success("Inserted a new episode: " + title + ", episode: " + lastEpisode);
       }
     } catch (Exception e) {
       Main.UI.error(e.toString());
