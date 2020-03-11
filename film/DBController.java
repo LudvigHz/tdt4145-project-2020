@@ -1,5 +1,6 @@
 import java.io.*;
 import java.sql.*;
+import org.apache.commons.lang3.StringUtils;
 
 public class DBController extends DBConn {
   public void loadFixtures() {
@@ -13,6 +14,8 @@ public class DBController extends DBConn {
       for (String fixture : fixtures) {
         try {
           executeScript(fixture);
+          Main.UI.success(
+              "Loaded fixtures for: " + StringUtils.substringBetween(fixture, "/", ".sql"));
         } catch (Exception e2) {
           Main.UI.error(e2.toString());
         }
