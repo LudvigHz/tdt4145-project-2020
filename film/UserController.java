@@ -43,7 +43,7 @@ public class UserController extends BaseController {
     }
   }
 
-  private boolean userMenu() {
+  public boolean userMenu() {
     int option = Main.UI.menu("User", Arrays.asList("Cancel", "Select user", "New user"));
 
     switch (option) {
@@ -95,12 +95,7 @@ public class UserController extends BaseController {
     return true;
   }
 
-  public void insertRating() {
-    String rating, text, filmId;
-    filmId = Main.UI.getUserInput("Enter id of movie to be rated: ");
-    text = Main.UI.getUserInput("Enter rating text: ");
-    rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
-
+  public void insertRatingQuery(String rating, String text, String filmId) {
     try {
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(
@@ -117,6 +112,14 @@ public class UserController extends BaseController {
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
+  }
+
+  public void insertRating() {
+    String rating, text, filmId;
+    filmId = Main.UI.getUserInput("Enter id of movie to be rated: ");
+    text = Main.UI.getUserInput("Enter rating text: ");
+    rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+    insertRatingQuery(rating, text, filmId);
   }
 
   public void insertComment() {

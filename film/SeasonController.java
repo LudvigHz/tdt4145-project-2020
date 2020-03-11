@@ -26,16 +26,8 @@ public class SeasonController extends BaseController {
 
   @Override
   public void listAllItems() {
-    try {
-      Statement stmt = conn.createStatement();
-      ResultSet data =
-          stmt.executeQuery(
-              "select sesongNr, tittel from Sesong as ses natural join Serie as ser natural join Utgivelse natural join Film");
-      ResultSetMetaData meta = data.getMetaData();
-      Main.UI.printItems(data, meta);
-    } catch (Exception e) {
-      Main.UI.error(e.toString());
-    }
+    int seriesKey = this.getSeriesKey();
+    listAllSeasons(seriesKey);
   }
 
   public void listAllSeasons(int seriesKey) {

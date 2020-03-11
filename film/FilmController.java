@@ -3,6 +3,8 @@ import java.util.*;
 
 public class FilmController extends BaseController {
 
+  private int userId;
+
   public FilmController() {
     super("Film");
   }
@@ -11,17 +13,189 @@ public class FilmController extends BaseController {
 
     main:
     while (true) {
-      int option = Main.UI.menu("Movies", Arrays.asList("Main", "List all", "Insert new"));
+      int option = Main.UI.menu("Movies", Arrays.asList("Main", "Movies", "Series", "Insert new"));
       switch (option) {
         case 0:
           break main;
         case 1:
-          listAllItems();
+          movieDetails();
           break;
         case 2:
+          seriesDetails();
+          break;
+        case 3:
           createFilm();
           break;
       }
+    }
+  }
+
+  public void movieDetails() {
+    listAllMovies();
+    String FilmID = Main.UI.getUserInput("Choose a movie: ");
+    movies:
+    while (true) {
+      int options2 =
+          Main.UI.menu(
+              "Movies",
+              Arrays.asList("Back", "Rate", "See actors", "See directors", "See writers"));
+      switch (options2) {
+        case 0:
+          break movies;
+        case 1:
+          Main.uc.userMenu();
+          String text = Main.UI.getUserInput("Enter rating text: ");
+          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+          Main.uc.insertRatingQuery(rating, text, FilmID);
+          break;
+        case 2:
+          this.listAllActors(FilmID);
+          break;
+        case 3:
+          this.listAllDirectors(FilmID);
+          break;
+        case 4:
+          this.listAllWriters(FilmID);
+          break;
+      }
+    }
+  }
+
+  public void seriesDetails() {
+    Main.sc.listAllSeries();
+    String FilmID = Main.UI.getUserInput("Choose a series: ");
+    series:
+    while (true) {
+      int options2 =
+          Main.UI.menu(
+              "Movies",
+              Arrays.asList(
+                  "Back", "Rate", "See actors", "See directors", "See writers", "Episodes"));
+      switch (options2) {
+        case 0:
+          break series;
+        case 1:
+          Main.uc.userMenu();
+          String text = Main.UI.getUserInput("Enter rating text: ");
+          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+          Main.uc.insertRatingQuery(rating, text, FilmID);
+          break;
+        case 2:
+          this.listAllActors(FilmID);
+          break;
+        case 3:
+          this.listAllDirectors(FilmID);
+          break;
+        case 4:
+          this.listAllWriters(FilmID);
+          break;
+        case 5:
+          episodeDetails(FilmID);
+          break;
+      }
+    }
+  }
+
+  public void episodeDetails(String FilmID) {
+    Main.sc.listAllSeasons(Integer.parseInt(FilmID));
+    String seasonNumber = Main.UI.getUserInput("Choose a season: ");
+    listAllEpisodes(FilmID, seasonNumber);
+    String episodeNumber = Main.UI.getUserInput("Choose an episode");
+    episodes:
+    while (true) {
+      int options2 =
+          Main.UI.menu(
+              "Movies",
+              Arrays.asList("Back", "Rate", "See actors", "See directors", "See writers"));
+      switch (options2) {
+        case 0:
+          break episodes;
+        case 1:
+          Main.uc.userMenu();
+          String text = Main.UI.getUserInput("Enter rating text: ");
+          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+          Main.uc.insertRatingQuery(rating, text, FilmID);
+          break;
+        case 2:
+          this.listAllActors(episodeNumber);
+          break;
+        case 3:
+          this.listAllDirectors(episodeNumber);
+          break;
+        case 4:
+          this.listAllWriters(episodeNumber);
+          break;
+      }
+    }
+  }
+
+  public void listAllEpisodes(String FilmID, String seasonNumber) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select * from Episode natural join Film where sesongNr="
+                  + seasonNumber
+                  + " and SerieID="
+                  + FilmID);
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllActors(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select navn, rolle from Person natural join SkueSpillerIFilm natural join Film where FilmID="
+                  + FilmID);
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllWriters(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select navn from Person natural join ManusForfatterIFilm natural join Film where FilmID="
+                  + FilmID);
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllDirectors(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select navn from Person natural join RegissørIFilm natural join Film where FilmID="
+                  + FilmID);
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllMovies() {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery("select * from SpilleFilm natural join Utgivelse natural join Film");
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
     }
   }
 
