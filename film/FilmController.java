@@ -112,6 +112,7 @@ public class FilmController extends BaseController {
       }
       if (!isEpisode) {
         stmt.executeUpdate("insert into Utgivelse values (" + FilmID + ", " + companyKey + ")");
+        stmt.executeUpdate("insert into Serie values (" + FilmID + ")");
         // Create first season when creating a series
         stmt.executeUpdate(
             "insert into Sesong (FilmID, SesongNR, utgittPåVideo) values("
