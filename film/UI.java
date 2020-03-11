@@ -31,7 +31,12 @@ public class UI {
   }
 
   public void error(String text) {
-    System.out.println((char) 27 + "[31m" + text);
+    System.out.println((char) 27 + "[31mERROR: " + text);
+    resetText();
+  }
+
+  public void success(String text) {
+    System.out.println((char) 27 + "[32mSUCCESS: " + text);
     resetText();
   }
 
@@ -87,6 +92,10 @@ public class UI {
   }
 
   public void printItems(ResultSet data, ResultSetMetaData meta) {
+    printItems(data, meta, "Result data");
+  }
+
+  public void printItems(ResultSet data, ResultSetMetaData meta, String header) {
     List<String> colNames = new ArrayList<String>();
     try {
       int cols = meta.getColumnCount();
@@ -95,12 +104,16 @@ public class UI {
         return;
       }
       for (int i = 1; i <= cols; i++) {
-        colNames.add(meta.getColumnName(i));
+        colNames.add(meta.getColumnLabel(i));
       }
 
+      int len =
+          colNames.stream().reduce("", (s, n) -> s + StringUtils.rightPad(n, 30)).length()
+              + colNames.size() * 2;
+
       spacer(2);
-      header("Result data", 80);
-      int len = tableRow(colNames);
+      header(header, len);
+      tableRow(colNames);
       tableRowSep(len);
 
       while (data.next()) {
