@@ -38,44 +38,19 @@ public class FilmController extends BaseController {
       int options2 =
           Main.UI.menu(
               "Movies",
-              Arrays.asList("Back", "Rate", "See actors", "See directors", "See writers"));
+              Arrays.asList(
+                  "Back",
+                  "Rate",
+                  "See actors",
+                  "See directors",
+                  "See writers",
+                  "See ratings",
+                  "See comments"));
       switch (options2) {
         case 0:
           break movies;
         case 1:
-          Main.uc.userMenu();
-          String text = Main.UI.getUserInput("Enter rating text: ");
-          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
-          Main.uc.insertRatingQuery(rating, text, FilmID);
-          break;
-        case 2:
-          this.listAllActors(FilmID);
-          break;
-        case 3:
-          this.listAllDirectors(FilmID);
-          break;
-        case 4:
-          this.listAllWriters(FilmID);
-          break;
-      }
-    }
-  }
-
-  public void seriesDetails() {
-    Main.sc.listAllSeries();
-    String FilmID = Main.UI.getUserInput("Choose a series: ");
-    series:
-    while (true) {
-      int options2 =
-          Main.UI.menu(
-              "Movies",
-              Arrays.asList(
-                  "Back", "Rate", "See actors", "See directors", "See writers", "Episodes"));
-      switch (options2) {
-        case 0:
-          break series;
-        case 1:
-          Main.uc.userMenu();
+          if (!Main.uc.userMenu()) break;
           String text = Main.UI.getUserInput("Enter rating text: ");
           String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
           Main.uc.insertRatingQuery(rating, text, FilmID);
@@ -90,6 +65,57 @@ public class FilmController extends BaseController {
           this.listAllWriters(FilmID);
           break;
         case 5:
+          listAllRatings(FilmID);
+          break;
+        case 6:
+          listAllComments(FilmID);
+          break;
+      }
+    }
+  }
+
+  public void seriesDetails() {
+    Main.sc.listAllSeries();
+    String FilmID = Main.UI.getUserInput("Choose a series: ");
+    series:
+    while (true) {
+      int options2 =
+          Main.UI.menu(
+              "Movies",
+              Arrays.asList(
+                  "Back",
+                  "Rate",
+                  "See actors",
+                  "See directors",
+                  "See writers",
+                  "See ratings",
+                  "See comments",
+                  "Episodes"));
+      switch (options2) {
+        case 0:
+          break series;
+        case 1:
+          if (!Main.uc.userMenu()) break;
+          String text = Main.UI.getUserInput("Enter rating text: ");
+          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+          Main.uc.insertRatingQuery(rating, text, FilmID);
+          break;
+        case 2:
+          this.listAllActors(FilmID);
+          break;
+        case 3:
+          this.listAllDirectors(FilmID);
+          break;
+        case 4:
+          this.listAllWriters(FilmID);
+          break;
+        case 5:
+          listAllRatings(FilmID);
+          break;
+        case 6:
+          listAllComments(FilmID);
+          break;
+        case 7:
           episodeDetails(FilmID);
           break;
       }
@@ -106,12 +132,19 @@ public class FilmController extends BaseController {
       int options2 =
           Main.UI.menu(
               "Movies",
-              Arrays.asList("Back", "Rate", "See actors", "See directors", "See writers"));
+              Arrays.asList(
+                  "Back",
+                  "Rate",
+                  "See actors",
+                  "See directors",
+                  "See writers",
+                  "See ratings",
+                  "See comments"));
       switch (options2) {
         case 0:
           break episodes;
         case 1:
-          Main.uc.userMenu();
+          if (!Main.uc.userMenu()) break;
           String text = Main.UI.getUserInput("Enter rating text: ");
           String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
           Main.uc.insertRatingQuery(rating, text, FilmID);
@@ -124,6 +157,12 @@ public class FilmController extends BaseController {
           break;
         case 4:
           this.listAllWriters(episodeNumber);
+          break;
+        case 5:
+          listAllRatings(episodeNumber);
+          break;
+        case 6:
+          listAllComments(episodeNumber);
           break;
       }
     }
@@ -168,6 +207,36 @@ public class FilmController extends BaseController {
                   + FilmID);
       ResultSetMetaData meta = data.getMetaData();
       Main.UI.printItems(data, meta);
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllRatings(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select rating, tekst, brukernavn from Bruker natural join Anmeldelse natural join (select FilmID, tittel as film from Film where FilmID="
+                  + FilmID
+                  + ") as f");
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta, "Ratings");
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+    }
+  }
+
+  public void listAllComments(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data =
+          stmt.executeQuery(
+              "select tekst, brukernavn from Bruker natural join Kommentar natural join (select FilmID, tittel as film from Film where FilmID="
+                  + FilmID
+                  + ") as f");
+      ResultSetMetaData meta = data.getMetaData();
+      Main.UI.printItems(data, meta, "Comments");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -222,13 +291,15 @@ public class FilmController extends BaseController {
     if (!isEpisode) {
       isSeries = Main.UI.getUserInput("Is this a series [y/n]: ").equals("y");
       companyKey = getCompany();
-      firstSeasonOnVideo =
-          Main.UI
-                  .getUserInput(
-                      "Has the first season of this series been released on video [y/n]: ")
-                  .equals("y")
-              ? "true"
-              : "false";
+      if (isSeries) {
+        firstSeasonOnVideo =
+            Main.UI
+                    .getUserInput(
+                        "Has the first season of this series been released on video [y/n]: ")
+                    .equals("y")
+                ? "true"
+                : "false";
+      }
       if (!isSeries) {
         publishedOnVideo =
             Main.UI.getUserInput("Is the film published on video [y/n]: ").equals("y")
@@ -288,14 +359,16 @@ public class FilmController extends BaseController {
         stmt.executeUpdate("insert into Utgivelse values (" + FilmID + ", " + companyKey + ")");
         stmt.executeUpdate("insert into Serie values (" + FilmID + ")");
         // Create first season when creating a series
-        stmt.executeUpdate(
-            "insert into Sesong (FilmID, SesongNR, utgittPåVideo) values("
-                + FilmID
-                + ", "
-                + "1"
-                + ", "
-                + firstSeasonOnVideo
-                + ");");
+        if (isSeries) {
+          stmt.executeUpdate(
+              "insert into Sesong (FilmID, SesongNR, utgittPåVideo) values("
+                  + FilmID
+                  + ", "
+                  + "1"
+                  + ", "
+                  + firstSeasonOnVideo
+                  + ");");
+        }
         if (!isSeries) {
           stmt.executeUpdate(
               "insert into SpilleFilm values ("
