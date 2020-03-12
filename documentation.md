@@ -86,17 +86,17 @@ kategori.
 
 ## Usecases
 
-These directions will assume that you have a working jar up and running and that you are in the first
+These directions will assume that you have a working program up and running and that you are in the first
 menu that appears when starting the app. Refer to the README for instructions on how to accomplish this.
 
-All usecases make use of the main and ui classes
+All usecases make use of the `main` and `ui` classes
 
 1. Finne navnet på alle rollene en gitt skuespiller har  
 - Enter the people menu by choosing people in the first menu.
 - Choose the option *list all roles*
 - Choose an actor. Charles Dance has, among others, a role in the fixtures
 
-The personcontroller handles the functionality for this usecase.
+The `personcontroller` handles the functionality for this usecase.
 
 2. Finne hvilke filmer en skuespiller opptrer i
 - Choose *people* on the first menu
@@ -104,14 +104,14 @@ The personcontroller handles the functionality for this usecase.
 - Select the ID of a person on the list
 - Select the *show all movies* option
 
-The personcontroller handles the functionality for this usecase.
+The `personcontroller` handles the functionality for this usecase.
 
 3. Finne hvilket selskap som lager flest filmer innen hver sjanger 
 - Choose the *companies* option in the first menu
 - Choose the *View compenies by category* option
 - Choose a category
 
-The categorycontroller handles the functionality for this usecase.
+The `categorycontroller` handles the functionality for this usecase.
 
 4. Lag en ny film med regissør, manusforfattere, skuespillere og det som hører med.
 - First add all people that is related to the movie(directors, actors etc. Do not worry about specifying what they have done in the movie,
@@ -132,7 +132,7 @@ The categorycontroller handles the functionality for this usecase.
 - Choose whether or not the movie has been released on video
 - Enter the length of the movie in minutes
 
-The filmcontroller handles the majority of this usecase. However, it makes use of the personcontroller, categorycontroller and the filmcompanycontroller
+The `filmcontroller` handles the majority of this usecase. However, it makes use of the `personcontroller`, `categorycontroller` and the `filmcompanycontroller`
 for listing the alternatives.
 
 5. Sett inn en ny anmeldelse av en episode
@@ -149,5 +149,5 @@ for listing the alternatives.
 - Enter rating
 - Too see the rating choose *see ratings*
 
-The filmcontroller handles most of the menu logic, yet the seasoncontroller handles most of the logic for listing the season. For the rating logic, the filmcontroller uses
-a lot of methods from the usercontroller.
+The `filmcontroller` handles most of the menu logic, yet the `seasoncontroller` handles most of the logic for listing the season. For the rating logic, the `filmcontroller` uses
+a lot of methods from the `usercontroller`.
