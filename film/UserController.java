@@ -109,7 +109,6 @@ public class UserController extends BaseController {
               + "','"
               + userId
               + "');");
-      Main.UI.success("Rating registered!");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }
@@ -127,7 +126,10 @@ public class UserController extends BaseController {
     String text, filmId;
     filmId = Main.UI.getUserInput("Enter id of movie to be commented: ");
     text = Main.UI.getUserInput("Enter text: ");
+    insertCommentQuery(filmId, text);
+  }
 
+  public void insertCommentQuery(String filmId, String text) {
     try {
       Statement stmt = conn.createStatement();
       stmt.executeUpdate(
@@ -139,7 +141,6 @@ public class UserController extends BaseController {
               + "','"
               + text
               + "');");
-      Main.UI.success("Comment registered!");
     } catch (Exception e) {
       Main.UI.error(e.toString());
     }

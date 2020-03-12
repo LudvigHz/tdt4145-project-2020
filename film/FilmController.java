@@ -41,6 +41,7 @@ public class FilmController extends BaseController {
               Arrays.asList(
                   "Back",
                   "Rate",
+                  "Comment",
                   "See actors",
                   "See directors",
                   "See writers",
@@ -51,27 +52,27 @@ public class FilmController extends BaseController {
         case 0:
           break movies;
         case 1:
-          if (!Main.uc.userMenu()) break;
-          String text = Main.UI.getUserInput("Enter rating text: ");
-          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
-          Main.uc.insertRatingQuery(rating, text, FilmID);
+          this.rateFilm(FilmID);
           break;
         case 2:
-          this.listAllActors(FilmID);
+          this.commentFilm(FilmID);
           break;
         case 3:
-          this.listAllDirectors(FilmID);
+          this.listAllActors(FilmID);
           break;
         case 4:
-          this.listAllWriters(FilmID);
+          this.listAllDirectors(FilmID);
           break;
         case 5:
-          listAllRatings(FilmID);
+          this.listAllWriters(FilmID);
           break;
         case 6:
-          listAllComments(FilmID);
+          listAllRatings(FilmID);
           break;
         case 7:
+          listAllComments(FilmID);
+          break;
+        case 8:
           listMusic(FilmID);
       }
     }
@@ -107,6 +108,7 @@ public class FilmController extends BaseController {
               Arrays.asList(
                   "Back",
                   "Rate",
+                  "Comment",
                   "See actors",
                   "See directors",
                   "See writers",
@@ -117,27 +119,27 @@ public class FilmController extends BaseController {
         case 0:
           break series;
         case 1:
-          if (!Main.uc.userMenu()) break;
-          String text = Main.UI.getUserInput("Enter rating text: ");
-          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
-          Main.uc.insertRatingQuery(rating, text, FilmID);
+          this.rateFilm(FilmID);
           break;
         case 2:
-          this.listAllActors(FilmID);
+          this.commentFilm(FilmID);
           break;
         case 3:
-          this.listAllDirectors(FilmID);
+          this.listAllActors(FilmID);
           break;
         case 4:
-          this.listAllWriters(FilmID);
+          this.listAllDirectors(FilmID);
           break;
         case 5:
-          listAllRatings(FilmID);
+          this.listAllWriters(FilmID);
           break;
         case 6:
-          listAllComments(FilmID);
+          listAllRatings(FilmID);
           break;
         case 7:
+          listAllComments(FilmID);
+          break;
+        case 8:
           episodeDetails(FilmID);
           break;
       }
@@ -157,6 +159,7 @@ public class FilmController extends BaseController {
               Arrays.asList(
                   "Back",
                   "Rate",
+                  "Comment",
                   "See actors",
                   "See directors",
                   "See writers",
@@ -166,28 +169,41 @@ public class FilmController extends BaseController {
         case 0:
           break episodes;
         case 1:
-          if (!Main.uc.userMenu()) break;
-          String text = Main.UI.getUserInput("Enter rating text: ");
-          String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
-          Main.uc.insertRatingQuery(rating, text, FilmID);
+          this.rateFilm(FilmID);
           break;
         case 2:
-          this.listAllActors(episodeNumber);
+          this.commentFilm(FilmID);
           break;
         case 3:
-          this.listAllDirectors(episodeNumber);
+          this.listAllActors(episodeNumber);
           break;
         case 4:
-          this.listAllWriters(episodeNumber);
+          this.listAllDirectors(episodeNumber);
           break;
         case 5:
-          listAllRatings(episodeNumber);
+          this.listAllWriters(episodeNumber);
           break;
         case 6:
+          listAllRatings(episodeNumber);
+          break;
+        case 7:
           listAllComments(episodeNumber);
           break;
       }
     }
+  }
+
+  public void rateFilm(String FilmID) {
+    if (!Main.uc.userMenu()) return;
+    String text = Main.UI.getUserInput("Enter rating text: ");
+    String rating = Main.UI.getUserInput("Enter rating (0 - 10): ");
+    Main.uc.insertRatingQuery(rating, text, FilmID);
+  }
+
+  public void commentFilm(String FilmID) {
+    if (!Main.uc.userMenu()) return;
+    String text = Main.UI.getUserInput("Enter comment: ");
+    Main.uc.insertCommentQuery(FilmID, text);
   }
 
   public void listAllEpisodes(String FilmID, String seasonNumber) {
