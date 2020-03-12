@@ -84,70 +84,82 @@ legge til nye.
 til selskaper, i tillegg til å liste opp alle filmselskaper som har produsert filmer innen en
 kategori.
 
+### MusicController
+
+`MusicController` har metoder for å liste musikk, samt legge inn ny filmMusikk.
+
 ## Usecases
 
 These directions will assume that you have a working program up and running and that you are in the first
 menu that appears when starting the app. Refer to the README for instructions on how to accomplish this.
 
-All usecases make use of the `main` and `ui` classes
+All usecases make use of the `Main` and `UI` classes
 
-1. Finne navnet på alle rollene en gitt skuespiller har  
-- Enter the people menu by choosing people in the first menu.
-- Choose the option *list all roles*
-- Choose an actor. Charles Dance has, among others, a role in the fixtures
+1. Finne navnet på alle rollene en gitt skuespiller har
 
-The `personcontroller` handles the functionality for this usecase.
+   - Enter the people menu by choosing people in the first menu.
+   - Choose the option _list all roles_
+   - Choose an actor. Charles Dance has, among others, a role in the fixtures
+
+   The `PersonController` handles the functionality for this usecase.
 
 2. Finne hvilke filmer en skuespiller opptrer i
-- Choose *people* on the first menu
-- Choose *Select a person* in the people menu
-- Select the ID of a person on the list
-- Select the *show all movies* option
 
-The `personcontroller` handles the functionality for this usecase.
+   - Choose _people_ on the first menu
+   - Choose _Select a person_ in the people menu
+   - Select the ID of a person on the list
+   - Select the _show all movies_ option
 
-3. Finne hvilket selskap som lager flest filmer innen hver sjanger 
-- Choose the *companies* option in the first menu
-- Choose the *View compenies by category* option
-- Choose a category
+   The `PersonController` handles the functionality for this usecase.
 
-The `categorycontroller` handles the functionality for this usecase.
+3. Finne hvilket selskap som lager flest filmer innen hver sjanger
+
+   - Choose the _companies_ option in the first menu
+   - Choose the _View compenies by category_ option
+   - Choose a category
+
+   The `CategoryController` handles the functionality for this usecase.
 
 4. Lag en ny film med regissør, manusforfattere, skuespillere og det som hører med.
-- First add all people that is related to the movie(directors, actors etc. Do not worry about specifying what they have done in the movie,
-    this will be added later) by using the insert new option in the *people* menu 
-- Choose the *movies* option in the first menu
-- Choose *insert new*
-- Enter a title
-- Enter a release year
-- Enter the release date in the specified format
-- Enter a brief description
-- Choose actors by entering their ID, and then their role
-- When done adding actors, continue by entering 0 in the choose ID prompt
-- Add directors and writers in the same way
-- Select a category from the list, until all categories have been added
-- Enter n when prompted about the movie being an episode
-- Do the same with the series prompt
-- Choose a company
-- Choose whether or not the movie has been released on video
-- Enter the length of the movie in minutes
 
-The `filmcontroller` handles the majority of this usecase. However, it makes use of the `personcontroller`, `categorycontroller` and the `filmcompanycontroller`
-for listing the alternatives.
+   - First add all people that is related to the movie(directors, actors etc. Do not worry
+   - about specifying what they have done in the movie,
+     this will be added later) by using the insert new option in the _people_ menu
+   - Choose the _movies_ option in the first menu
+   - Choose _insert new_
+   - Enter a title
+   - Enter a release year
+   - Enter the release date in the specified format
+   - Enter a brief description
+   - Choose actors by entering their ID, and then their role
+   - When done adding actors, continue by entering 0 in the choose ID prompt
+   - Add directors and writers in the same way
+   - Select a category from the list, until all categories have been added
+   - Enter n when prompted about the movie being an episode
+   - Do the same with the series prompt
+   - Choose a company
+   - Choose whether or not the movie has been released on video
+   - Enter the length of the movie in minutes
+   - To add music, you can enter the datail menu of the movie and select `Add music`
+
+   The `FilmController` handles the majority of this usecase. However, it makes
+   use of the `PersonController`, `CategoryController`, `FilmcompanyController` and `MusicController`.
+   for listing the alternatives.
 
 5. Sett inn en ny anmeldelse av en episode
-- Choose the *movies* option in the first menu
-- Choose *series*
-- Choose the filmID of a series
-- Choose *episodes*
-- Select a season
-- Enter the id of an episode
-- Choose *rate*
-- Choose *New user*
-- Enter a username
-- Enter rating text
-- Enter rating
-- Too see the rating choose *see ratings*
 
-The `filmcontroller` handles most of the menu logic, yet the `seasoncontroller` handles most of the logic for listing the season. For the rating logic, the `filmcontroller` uses
-a lot of methods from the `usercontroller`.
+   - Choose the _movies_ option in the first menu - Choose _series_
+   - Choose the filmID of a series
+   - Choose _episodes_
+   - Select a season
+   - Enter the id of an episode
+   - Choose _rate_
+   - Choose _New user_
+   - Enter a username
+   - Enter rating text
+   - Enter rating
+   - Too see the rating choose _see ratings_
+
+   The `FilmController` handles most of the menu logic, yet the `SeasonController`
+   handles most of the logic for listing the season. For the rating logic, the `FilmcCntroller` uses
+   a lot of methods from the `UserController`.

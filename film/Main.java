@@ -11,6 +11,7 @@ public class Main {
   public static CategoryController cc = new CategoryController();
   public static FilmCompanyController fcc = new FilmCompanyController();
   public static SeasonController sc = new SeasonController();
+  public static MusicController mc = new MusicController();
 
   public static void main(String[] args) {
     db.connect();
@@ -28,6 +29,7 @@ public class Main {
                   "Categories",
                   "Companies",
                   "Seasons",
+                  "Music",
                   "Load fixtures",
                   "Reset database"));
       switch (option) {
@@ -52,9 +54,12 @@ public class Main {
           sc.selectOperation();
           break;
         case 7:
-          db.loadFixtures();
+          mc.selectOperation();
           break;
         case 8:
+          db.loadFixtures();
+          break;
+        case 9:
           db.resetdb();
       }
     }

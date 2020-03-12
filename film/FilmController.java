@@ -33,11 +33,15 @@ public class FilmController extends BaseController {
   public void movieDetails() {
     listAllMovies();
     String FilmID = Main.UI.getUserInput("Choose a movie: ");
+    String selectedName = getMovieName(FilmID);
+    if (selectedName == "") {
+      return;
+    }
     movies:
     while (true) {
       int options2 =
           Main.UI.menu(
-              "Movies",
+              "Movie details for: " + selectedName,
               Arrays.asList(
                   "Back",
                   "Rate",
@@ -47,7 +51,8 @@ public class FilmController extends BaseController {
                   "See writers",
                   "See ratings",
                   "See comments",
-                  "See music"));
+                  "See music",
+                  "Add music"));
       switch (options2) {
         case 0:
           break movies;
@@ -74,6 +79,10 @@ public class FilmController extends BaseController {
           break;
         case 8:
           listMusic(FilmID);
+          break;
+        case 9:
+          addMusic(FilmID);
+          break;
       }
     }
   }
@@ -100,11 +109,15 @@ public class FilmController extends BaseController {
   public void seriesDetails() {
     Main.sc.listAllSeries();
     String FilmID = Main.UI.getUserInput("Choose a series: ");
+    String selectedName = getMovieName(FilmID);
+    if (selectedName == "") {
+      return;
+    }
     series:
     while (true) {
       int options2 =
           Main.UI.menu(
-              "Movies",
+              "Series details for " + selectedName,
               Arrays.asList(
                   "Back",
                   "Rate",
@@ -155,7 +168,7 @@ public class FilmController extends BaseController {
     while (true) {
       int options2 =
           Main.UI.menu(
-              "Movies",
+              "Details for Season " + seasonNumber + ", Episode " + episodeNumber,
               Arrays.asList(
                   "Back",
                   "Rate",
@@ -164,7 +177,9 @@ public class FilmController extends BaseController {
                   "See directors",
                   "See writers",
                   "See ratings",
-                  "See comments"));
+                  "See comments",
+                  "See music",
+                  "Add music"));
       switch (options2) {
         case 0:
           break episodes;
@@ -189,8 +204,20 @@ public class FilmController extends BaseController {
         case 7:
           listAllComments(episodeNumber);
           break;
+        case 8:
+          listMusic(FilmID);
+          break;
+        case 9:
+          addMusic(FilmID);
+          break;
       }
     }
+  }
+
+  public void addMusic(String FilmID) {
+    Main.mc.listAllItems();
+    String musicId = Main.UI.getUserInput("Select a track to add to the movie: ");
+    Main.mc.insertFilmMusic(FilmID, musicId);
   }
 
   public void rateFilm(String FilmID) {
@@ -651,5 +678,19 @@ public class FilmController extends BaseController {
       break;
     }
     return companyKey;
+  }
+
+  private String getMovieName(String FilmID) {
+    try {
+      Statement stmt = conn.createStatement();
+      ResultSet data = stmt.executeQuery("select tittel from Film where FilmID = " + FilmID);
+      if (data.next()) {
+        return data.getString(1);
+      }
+      return "";
+    } catch (Exception e) {
+      Main.UI.error(e.toString());
+      return "";
+    }
   }
 }
