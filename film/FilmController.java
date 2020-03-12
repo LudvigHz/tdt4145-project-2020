@@ -150,7 +150,7 @@ public class FilmController extends BaseController {
     Main.sc.listAllSeasons(Integer.parseInt(FilmID));
     String seasonNumber = Main.UI.getUserInput("Choose a season: ");
     listAllEpisodes(FilmID, seasonNumber);
-    String episodeNumber = Main.UI.getUserInput("Choose an episode: ");
+    String episodeNumber = Main.UI.getUserInput("Choose the id of an episode: ");
     episodes:
     while (true) {
       int options2 =
@@ -169,10 +169,10 @@ public class FilmController extends BaseController {
         case 0:
           break episodes;
         case 1:
-          this.rateFilm(FilmID);
+          this.rateFilm(episodeNumber);
           break;
         case 2:
-          this.commentFilm(FilmID);
+          this.commentFilm(episodeNumber);
           break;
         case 3:
           this.listAllActors(episodeNumber);
@@ -211,7 +211,7 @@ public class FilmController extends BaseController {
       Statement stmt = conn.createStatement();
       ResultSet data =
           stmt.executeQuery(
-              "select E.episodeNr as Episode, E.sesongNr as Sesong,"
+              "select E.FilmID as id, E.episodeNr as Episode, E.sesongNr as Sesong,"
                   + " E.lengde as Lengde, F.tittel as Tittel, F.utgivelsesår as År,"
                   + " F.lanseringsdato as Dato, F.beskrivelse as Beskrivelse"
                   + " from Episode as E natural join Film as F where sesongNr="
