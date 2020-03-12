@@ -140,7 +140,11 @@ All usecases make use of the `Main` and `UI` classes
    - Choose a company
    - Choose whether or not the movie has been released on video
    - Enter the length of the movie in minutes
-   - To add music, you can enter the datail menu of the movie and select `Add music`
+   - To add music, go back to the first menu and select *movies*  
+   - Choose *movies* again
+   - Select the movie
+   - Select movies
+   - Select *Add music*
 
    The `FilmController` handles the majority of this usecase. However, it makes
    use of the `PersonController`, `CategoryController`, `FilmcompanyController` and `MusicController`.
@@ -148,7 +152,8 @@ All usecases make use of the `Main` and `UI` classes
 
 5. Sett inn en ny anmeldelse av en episode
 
-   - Choose the _movies_ option in the first menu - Choose _series_
+   - Choose the _movies_ option in the first menu
+   - Choose _series_
    - Choose the filmID of a series
    - Choose _episodes_
    - Select a season
