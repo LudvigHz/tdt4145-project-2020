@@ -140,7 +140,7 @@ All usecases make use of the `Main` and `UI` classes
    - Choose a company
    - Choose whether or not the movie has been released on video
    - Enter the length of the movie in minutes
-   - To add music, go back to the first menu and select *movies*  
+   - To add music, go back to the first menu and select *movies*
    - Choose *movies* again
    - Select the movie
    - Select movies
